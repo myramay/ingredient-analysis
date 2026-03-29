@@ -1,8 +1,18 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #fff5f8;
+  --foreground: #1a0a10;
+  --pink-50: #fff0f5;
+  --pink-100: #ffe4ee;
+  --pink-200: #ffc8dc;
+  --pink-300: #ff9dbf;
+  --pink-400: #ff6b9d;
+  --pink-500: #f43f7a;
+  --pink-600: #e11d62;
+  --card-bg: rgba(255, 255, 255, 0.75);
+  --card-border: rgba(255, 107, 157, 0.2);
+  --glow: rgba(244, 63, 122, 0.15);
 }
 
 @theme inline {
@@ -12,15 +22,159 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans, 'Inter', Arial, sans-serif);
+  min-height: 100vh;
 }
+
+/* ── Pink mesh gradient background ── */
+.bg-pink-mesh {
+  background:
+    radial-gradient(ellipse at 20% 10%, rgba(255, 192, 220, 0.45) 0%, transparent 55%),
+    radial-gradient(ellipse at 80% 0%, rgba(255, 157, 191, 0.35) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 80%, rgba(255, 228, 238, 0.5) 0%, transparent 60%),
+    linear-gradient(160deg, #fff5f8 0%, #ffe4ee 40%, #fff0f5 100%);
+}
+
+/* ── Glassmorphism card ── */
+.glass-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow:
+    0 4px 24px rgba(244, 63, 122, 0.08),
+    0 1px 4px rgba(244, 63, 122, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  border-radius: 20px;
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
+}
+
+.glass-card:hover {
+  box-shadow:
+    0 8px 32px rgba(244, 63, 122, 0.15),
+    0 2px 8px rgba(244, 63, 122, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  transform: translateY(-2px);
+}
+
+/* ── Ingredient card safety color strips ── */
+.safety-safe    { border-left: 4px solid #22c55e; }
+.safety-caution { border-left: 4px solid #f59e0b; }
+.safety-controversial { border-left: 4px solid #f97316; }
+.safety-allergen { border-left: 4px solid #ef4444; }
+.safety-under_research { border-left: 4px solid #8b5cf6; }
+
+/* ── Safety badge colors ── */
+.badge-safe    { background: #dcfce7; color: #166534; }
+.badge-caution { background: #fef3c7; color: #92400e; }
+.badge-controversial { background: #ffedd5; color: #9a3412; }
+.badge-allergen { background: #fee2e2; color: #991b1b; }
+.badge-under_research { background: #ede9fe; color: #4c1d95; }
+
+/* ── Score ring animation ── */
+@keyframes score-draw {
+  from { stroke-dashoffset: 339; }
+  to   { stroke-dashoffset: var(--score-offset); }
+}
+
+.score-ring-circle {
+  stroke-dasharray: 339;
+  stroke-dashoffset: 339;
+  animation: score-draw 1.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-delay: 0.3s;
+}
+
+/* ── Skeleton shimmer ── */
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, #ffd6e7 25%, #ffe8f0 50%, #ffd6e7 75%);
+  background-size: 800px 100%;
+  animation: shimmer 1.6s infinite linear;
+  border-radius: 10px;
+}
+
+/* ── Fade-in-up for result cards ── */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.4s ease forwards;
+}
+
+/* ── Glow button ── */
+.btn-pink {
+  background: linear-gradient(135deg, #f43f7a 0%, #e11d62 100%);
+  color: white;
+  font-weight: 600;
+  border-radius: 14px;
+  padding: 14px 32px;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 20px rgba(244, 63, 122, 0.4);
+}
+
+.btn-pink::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.btn-pink:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(244, 63, 122, 0.55);
+}
+
+.btn-pink:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.btn-pink:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* ── Input fields ── */
+.input-pink {
+  background: rgba(255, 255, 255, 0.8);
+  border: 1.5px solid rgba(255, 107, 157, 0.3);
+  border-radius: 14px;
+  padding: 12px 16px;
+  width: 100%;
+  font-size: 0.95rem;
+  color: var(--foreground);
+  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none;
+}
+
+.input-pink:focus {
+  border-color: #f43f7a;
+  box-shadow: 0 0 0 3px rgba(244, 63, 122, 0.12);
+}
+
+.input-pink::placeholder {
+  color: #d4739a;
+}
+
+/* ── Score meter gradient colors ── */
+.score-excellent { color: #22c55e; }
+.score-good      { color: #84cc16; }
+.score-fair      { color: #f59e0b; }
+.score-poor      { color: #ef4444; }
